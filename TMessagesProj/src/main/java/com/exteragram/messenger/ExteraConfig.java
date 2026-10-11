@@ -191,6 +191,38 @@ public final class ExteraConfig {
         getPreferences().edit().putBoolean("useYandexMaps", value).apply();
     }
 
+    /** Default endpoint for exteraGram's profile API. An explicitly saved empty value disables it. */
+    private static final String DEFAULT_API_BASE_URL = "https://api.exteragram.app/api/v1/";
+
+    public static String getApiBaseUrl() {
+        android.content.SharedPreferences preferences = getPreferences();
+        if (preferences.contains("apiBaseUrl")) {
+            return preferences.getString("apiBaseUrl", "");
+        }
+        String value = preferences.getString("badgeApiUrl", "");
+        if (value.trim().isEmpty()) {
+            // Keep the temporary name accepted by the first compatible build.
+            return DEFAULT_API_BASE_URL;
+        }
+        return value;
+    }
+
+    public static void setApiBaseUrl(String value) {
+        getPreferences().edit().putString("apiBaseUrl", value == null ? "" : value.trim()).apply();
+    }
+
+    /** @deprecated use {@link #getApiBaseUrl()} */
+    @Deprecated
+    public static String getBadgeApiUrl() {
+        return getApiBaseUrl();
+    }
+
+    /** @deprecated use {@link #setApiBaseUrl(String)} */
+    @Deprecated
+    public static void setBadgeApiUrl(String value) {
+        setApiBaseUrl(value);
+    }
+
     public static int getDownloadSpeedBoost() {
         ensureLoaded();
         return GeneralConfig.downloadSpeedBoost.Int();
@@ -2050,6 +2082,8 @@ public final class ExteraConfig {
             new PreferencesUtils.BackupItem("inAppVibration", Boolean.class),
             new PreferencesUtils.BackupItem("filterZalgo", Boolean.class),
             new PreferencesUtils.BackupItem("useYandexMaps", Boolean.class),
+            new PreferencesUtils.BackupItem("apiBaseUrl", String.class),
+            new PreferencesUtils.BackupItem("badgeApiUrl", String.class),
             new PreferencesUtils.BackupItem("downloadSpeedBoost", Integer.class),
             new PreferencesUtils.BackupItem("uploadSpeedBoost", Boolean.class),
             new PreferencesUtils.BackupItem("hidePhoneNumber", Boolean.class),

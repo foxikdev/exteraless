@@ -9,6 +9,7 @@
 package org.telegram.messenger;
 
 import app.exteraless.OpenExteraConfig;
+import com.exteragram.messenger.api.ApiController;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -287,6 +288,7 @@ public class ApplicationLoader extends Application implements CameraXConfig.Prov
         NekoConfig.init();
         NaConfig.init();
         OpenExteraConfig.init();
+        ApiController.init();
         app.exteraless.icons.IconPacksConfig.init();
         app.exteraless.pillstack.PillStackConfig.init();
         app.exteraless.appearance.AppearanceConfig.init();

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.widget.FrameLayout;
 
 import com.exteragram.messenger.api.dto.BadgeDTO;
+import com.exteragram.messenger.api.db.ProfileStore;
 import com.exteragram.messenger.badges.source.ApiBadgeSource;
 import com.exteragram.messenger.utils.text.LocaleUtils;
 
@@ -32,13 +33,14 @@ public final class BadgesController {
 
     public static final BadgesController INSTANCE = new BadgesController();
 
-    private static final ApiBadgeSource apiBadgeSource = new ApiBadgeSource();
+    private static final ApiBadgeSource apiBadgeSource = new ApiBadgeSource(ProfileStore.INSTANCE);
 
     private static final String PREFS_NAME = "exteraless_badges";
     private static final String KEY_DOCUMENT = "badge_document_";
     private static final String KEY_TEXT = "badge_text_";
 
     private BadgesController() {
+        apiBadgeSource.loadToCache();
     }
 
     private static SharedPreferences prefs() {
@@ -139,6 +141,7 @@ public final class BadgesController {
     public void updateBadge(BadgeDTO badge, Consumer<String> callback) {
         long id = selfId();
         if (id != 0) {
+            apiBadgeSource.updateLocalBadge(id, badge);
             SharedPreferences.Editor editor = prefs().edit();
             if (badge == null) {
                 editor.remove(KEY_DOCUMENT + id).remove(KEY_TEXT + id);
