@@ -227,6 +227,7 @@ import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stories.StealthModeAlert;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
+import org.telegram.ui.Wallet.WalletActivity;
 import org.telegram.ui.bots.BotWebViewSheet;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
@@ -14211,6 +14212,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
                 presentFragment(new ChatActivity(args));
             });
+            if (getMessagesController().config.walletAvailable.get()) {
+                io.add(R.drawable.ic_gram, getString(R.string.WalletTitle), () -> presentFragment(new WalletActivity()));
+            }
             }
             if (hideBottomNavigationBar && NaConfig.INSTANCE.getShowAddToBookmark().Bool()) {
                 io.add(R.drawable.msg_fave, getString(R.string.BookmarksManager), () -> presentFragment(new BookmarkManagerActivity()));
